@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import ClubScreen from './screens/ClubsScreen';
+import PartiesScreen from './screens/PartiesScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import CreateScreen from './screens/CreateScreen';
 import JoinScreen from './screens/JoinScreen';
@@ -26,10 +26,10 @@ function App() {
           sceneContainerStyle={{backgroundColor: '#111111'}}
           screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
-              if (route.name === 'Clubs') {
+              if (route.name === 'Parties') {
                 return (
                   <MaterialCommunityIcons
-                    name="account-group-outline"
+                    name="party-popper"
                     color={color}
                     size={focused ? 31 : 28}
                   />
@@ -76,7 +76,7 @@ function App() {
             },
             headerTintColor: 'white',
           })}>
-          <Tab.Screen name="Clubs" component={ClubScreen} />
+          <Tab.Screen name="Parties" component={PartiesScreen} />
           <Tab.Screen name="Join" component={JoinScreen} />
           <Tab.Screen name="Create" component={CreateScreen} />
           <Tab.Screen name="Setting" component={SettingsScreen} />

@@ -15,7 +15,7 @@ import LoadingScreen from './screens/LoadingScreen';
 
 function App() {
   const Tab = createBottomTabNavigator();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   if (loading) {
     return <LoadingScreen />;

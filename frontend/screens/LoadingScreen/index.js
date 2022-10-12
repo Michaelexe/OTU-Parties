@@ -1,6 +1,5 @@
 import {View, Text, SafeAreaView, Image} from 'react-native';
 import React from 'react';
-import {ActivityIndicator} from '@react-native-material/core';
 
 import ontarioTechLogo from '../../assets/ontarioTechLogo.png';
 
@@ -17,7 +16,6 @@ const LoadingScreen = () => {
       <View>
         <Image source={ontarioTechLogo} style={{width: 200}} />
       </View>
-      <ActivityIndicator size="large" color="#57e6ff" />
     </SafeAreaView>
   );
 };

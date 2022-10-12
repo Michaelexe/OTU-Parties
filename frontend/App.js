@@ -1,5 +1,5 @@
-import react, {useState} from 'react';
-import {View, Text, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import react, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -7,18 +7,32 @@ import PartiesScreen from './screens/PartiesScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import CreateScreen from './screens/CreateScreen';
 import JoinScreen from './screens/JoinScreen';
+import LoginScreen from './screens/LoginScreen';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LoadingScreen from './screens/LoadingScreen';
 
 function App() {
   const Tab = createBottomTabNavigator();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      console.log('going here');
+    } else {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    }
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
+  } else if (!loading && !user.isAuthenticated) {
+    return <LoginScreen />;
   } else {
     return (
       <NavigationContainer>

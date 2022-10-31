@@ -2,9 +2,11 @@ import {View, StyleSheet, Text, SafeAreaView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Input, Button} from 'native-base';
 
-const LoginScreen = ({setSignedOutState}) => {
+const RegisterPage = ({setSignedOutState}) => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -23,29 +25,56 @@ const LoginScreen = ({setSignedOutState}) => {
       />
       <Input
         variant="outline"
+        placeholder="Email"
+        size="2xl"
+        color={'main.200'}
+        focusOutlineColor={'main.200'}
+        backgroundColor={''}
+        marginBottom={4}
+        value={email}
+        onChange={e => {
+          setEmail(e.nativeEvent.text);
+        }}
+      />
+      <Input
+        variant="outline"
         placeholder="Password"
         type="password"
         size="2xl"
         color={'main.200'}
         focusOutlineColor={'main.200'}
         backgroundColor={''}
-        marginBottom={6}
+        marginBottom={4}
         value={password}
         onChange={e => {
           setPassword(e.nativeEvent.text);
         }}
       />
+      <Input
+        variant="outline"
+        placeholder="Confirm Password"
+        type="password"
+        size="2xl"
+        color={'main.200'}
+        focusOutlineColor={'main.200'}
+        backgroundColor={''}
+        marginBottom={8}
+        value={confirmPassword}
+        onChange={e => {
+          setConfirmPassword(e.nativeEvent.text);
+        }}
+      />
       <Button size="lg" backgroundColor={'main.200'} style={{width: '100%'}}>
-        Login
+        Register
       </Button>
       <Text style={styles.smallText}>
-        Don't have an account?{' '}
+        Already Registered?{' '}
         <Text
           style={styles.link}
           onPress={() => {
-            setSignedOutState('register');
+            setSignedOutState('login');
           }}>
-          Register
+          Login
         </Text>
       </Text>
     </SafeAreaView>
@@ -74,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterPage;

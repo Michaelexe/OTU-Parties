@@ -12,10 +12,12 @@ import LoginScreen from './screens/LoginScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LoadingScreen from './screens/LoadingScreen';
+import RegisterPage from './screens/RegisterScreen';
 
 function App() {
   const Tab = createBottomTabNavigator();
   const [loading, setLoading] = useState(true);
+  const [signedOutState, setSignedOutState] = useState('register');
 
   const user = useSelector(state => state.user);
 
@@ -32,7 +34,11 @@ function App() {
   if (loading) {
     return <LoadingScreen />;
   } else if (!loading && !user.isAuthenticated) {
-    return <LoginScreen />;
+    if (signedOutState == 'login') {
+      return <LoginScreen setSignedOutState={setSignedOutState} />;
+    } else {
+      return <RegisterPage setSignedOutState={setSignedOutState} />;
+    }
   } else {
     return (
       <NavigationContainer>

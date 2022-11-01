@@ -1,12 +1,31 @@
 import {View, StyleSheet, Text, SafeAreaView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Input, Button} from 'native-base';
+import agent from '../../agent';
+import {useDispatch} from 'react-redux';
+import {login} from '../../reducers/users';
 
 const RegisterPage = ({setSignedOutState}) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+
+  const submitHandler = () => {
+    agent.Auth.register({
+      username,
+      email,
+      password,
+      repeatPassword,
+    })
+      .then(res => {
+        dispatch(login({...res.data.user, created: [], joined: []}));
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -59,12 +78,16 @@ const RegisterPage = ({setSignedOutState}) => {
         focusOutlineColor={'main.200'}
         backgroundColor={''}
         marginBottom={8}
-        value={confirmPassword}
+        value={repeatPassword}
         onChange={e => {
-          setConfirmPassword(e.nativeEvent.text);
+          setRepeatPassword(e.nativeEvent.text);
         }}
       />
-      <Button size="lg" backgroundColor={'main.200'} style={{width: '100%'}}>
+      <Button
+        size="lg"
+        backgroundColor={'main.200'}
+        style={{width: '100%'}}
+        onPress={submitHandler}>
         Register
       </Button>
       <Text style={styles.smallText}>

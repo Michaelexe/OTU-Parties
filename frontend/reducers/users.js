@@ -1,4 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createSlice} from '@reduxjs/toolkit';
+
+const setJWT = async jwt => {
+  await AsyncStorage.setItem('user_jwt', jwt);
+};
 
 export const userSlice = createSlice({
   name: 'user',
@@ -11,20 +16,20 @@ export const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      const token = action.payload;
-
       state.isAuthenticated = true;
-      state.partiesCreated = token.created;
-      state.partiesJoined = token.joined;
-      state.access = token.access || state.access;
-      state.user = token.user
+      state.partiesCreated = action.payload.created;
+      state.partiesJoined = action.payload.joined;
+      state.access = action.payload.token ? action.payload.token : state.access;
+      state.user = action.payload.username
         ? {
-            firstName: token.first_name,
-            lastName: token.last_name,
-            id: token.id,
+            username: action.payload.username,
+            email: action.payload.email,
           }
         : state.user;
-      state.field = token.user || [];
+
+      if (action.payload.token) {
+        setJWT(action.payload.token);
+      }
     },
     logout: state => {
       state.isAuthenticated = false;

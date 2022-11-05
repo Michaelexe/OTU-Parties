@@ -4,6 +4,7 @@ import {Input, Button} from 'native-base';
 import agent from '../../agent';
 import {useDispatch} from 'react-redux';
 import {login} from '../../reducers/users';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterPage = ({setSignedOutState}) => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const RegisterPage = ({setSignedOutState}) => {
       repeatPassword,
     })
       .then(res => {
-        dispatch(login({...res.data.user, created: [], joined: []}));
+        dispatch(login({...res.data, created: [], joined: []}));
       })
       .catch(err => {
         console.log(err.response);

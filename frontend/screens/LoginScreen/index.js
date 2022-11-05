@@ -1,10 +1,28 @@
 import {View, StyleSheet, Text, SafeAreaView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Input, Button} from 'native-base';
+import agent from '../../agent';
+import {useDispatch} from 'react-redux';
+import {login} from '../../reducers/users';
 
 const LoginScreen = ({setSignedOutState}) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const submitHandler = () => {
+    const formData = {
+      username,
+      password,
+    };
+    agent.Auth.login(formData)
+      .then(res => {
+        dispatch(login({...res.data.data}));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -35,7 +53,11 @@ const LoginScreen = ({setSignedOutState}) => {
           setPassword(e.nativeEvent.text);
         }}
       />
-      <Button size="lg" backgroundColor={'main.200'} style={{width: '100%'}}>
+      <Button
+        size="lg"
+        backgroundColor={'main.200'}
+        style={{width: '100%'}}
+        onPress={submitHandler}>
         Login
       </Button>
       <Text style={styles.smallText}>

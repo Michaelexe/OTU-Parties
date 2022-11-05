@@ -13,22 +13,40 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LoadingScreen from './screens/LoadingScreen';
 import RegisterPage from './screens/RegisterScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import agent from './agent';
+import {login} from './reducers/users';
 
 function App() {
   const Tab = createBottomTabNavigator();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [signedOutState, setSignedOutState] = useState('register');
 
   const user = useSelector(state => state.user);
 
-  useEffect(() => {
-    if (user.isAuthenticated) {
-      console.log('going here');
+  const loadingHandler = async () => {
+    const access = await AsyncStorage.getItem('user_jwt');
+    if (access && access !== null) {
+      agent.User.getInfo()
+        .then(res => {
+          dispatch(login(res.data));
+          setTimeout(() => {
+            setLoading(false);
+          }, 2000);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else {
       setTimeout(() => {
         setLoading(false);
       }, 3000);
     }
+  };
+
+  useEffect(() => {
+    loadingHandler();
   }, []);
 
   if (loading) {

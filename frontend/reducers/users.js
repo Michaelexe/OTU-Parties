@@ -37,6 +37,7 @@ export const userSlice = createSlice({
       state.partiesCreated = [];
       state.partiesJoined = [];
       state.access = null;
+      setJWT('');
     },
   },
 });

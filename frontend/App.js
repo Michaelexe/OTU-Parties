@@ -21,13 +21,13 @@ function App() {
   const Tab = createBottomTabNavigator();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [signedOutState, setSignedOutState] = useState('register');
+  const [signedOutState, setSignedOutState] = useState('login');
 
   const user = useSelector(state => state.user);
 
   const loadingHandler = async () => {
     const access = await AsyncStorage.getItem('user_jwt');
-    if (access && access !== null) {
+    if (access && access !== '') {
       agent.User.getInfo()
         .then(res => {
           dispatch(login(res.data));

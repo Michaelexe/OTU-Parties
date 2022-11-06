@@ -15,7 +15,7 @@ import LoadingScreen from './screens/LoadingScreen';
 import RegisterPage from './screens/RegisterScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import agent from './agent';
-import {login} from './reducers/users';
+import {login, logout} from './reducers/users';
 
 function App() {
   const Tab = createBottomTabNavigator();
@@ -35,8 +35,9 @@ function App() {
             setLoading(false);
           }, 2000);
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err);
+          dispatch(logout());
         });
     } else {
       setTimeout(() => {

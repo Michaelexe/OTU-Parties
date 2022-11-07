@@ -53,7 +53,7 @@ passport.use(
             if (result) {
               done(null, {
                 username: userinfo.rows[0].username,
-                email: userinfo.rows[0].username,
+                email: userinfo.rows[0].email,
                 user_uuid: userinfo.rows[0].user_uuid,
                 joined: partiesJoined.rows,
                 created: partiesCreated.rows,

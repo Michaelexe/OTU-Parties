@@ -9,9 +9,10 @@ CREATE TABLE IF NOT EXISTS user_account (
 
 CREATE TABLE IF NOT EXISTS party (
     party_uuid UUID NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+    party_name TEXT NOT NULL,
     description TEXT NULL,
     location TEXT NOT NULL,
-    time TIMESTAMPTZ NOT NULL
+    date_time TIMESTAMP NOT NULL
 );
 
 CREATE TABLE party_member (

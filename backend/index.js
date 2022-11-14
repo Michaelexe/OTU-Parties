@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 const format = require("pg-format");
 const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
+const partiesRoute = require("./routes/partiesRoute");
 
 const app = express();
 
@@ -107,10 +108,16 @@ app.use(
   passport.authenticate("user_account_jwt", { session: false })
 );
 
+app.use(
+  "/api/parties",
+  passport.authenticate("user_account_jwt", { session: false })
+);
+
 // ------------------------------------------------------------- ROUTES
 
 app.use("/api/auth/user", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/parties", partiesRoute);
 
 // ------------------------------------------------------------- LISTENER
 port = process.env.SERVERPORT || 5000;

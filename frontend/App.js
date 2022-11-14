@@ -35,9 +35,12 @@ function App() {
             setLoading(false);
           }, 2000);
         })
-        .catch(async err => {
+        .catch(err => {
           console.log(err);
           dispatch(logout());
+          setTimeout(() => {
+            setLoading(false);
+          }, 2000);
         });
     } else {
       setTimeout(() => {

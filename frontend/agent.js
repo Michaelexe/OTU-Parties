@@ -30,4 +30,10 @@ const User = {
   getInfo: () => instance.get('/user/info'),
 };
 
-export default {Auth, User};
+const Parties = {
+  create: partyData => instance.post('/parties/create', partyData),
+  all: () => instance.get('/parties/all'),
+  join: party_uuid => instance.post('/parties/join', {party_uuid}),
+};
+
+export default {Auth, User, Parties};

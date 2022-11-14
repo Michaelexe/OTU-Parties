@@ -17,7 +17,7 @@ router.get(
     );
     const partiesJoined = await db.query(
       format(
-        "SELECT * FROM party JOIN party_member ON party.party_uuid=party_member.party_uuid WHERE user_uuid=%L AND member_status='joined'",
+        "SELECT * FROM party JOIN party_member ON party.party_uuid=party_member.party_uuid WHERE user_uuid=%L AND member_status!='host'",
         req.user.user_uuid
       )
     );

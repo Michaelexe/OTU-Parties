@@ -34,6 +34,11 @@ const Parties = {
   create: partyData => instance.post('/parties/create', partyData),
   all: () => instance.get('/parties/all'),
   join: party_uuid => instance.post('/parties/join', {party_uuid}),
+  requests: () => instance.get('/parties/requests'),
+  acceptRequest: (party_uuid, user_uuid) =>
+    instance.put('/parties/accept', {party_uuid, user_uuid}),
+  declineRequest: (party_uuid, user_uuid) =>
+    instance.delete('/parties/decline', {data: {party_uuid, user_uuid}}),
 };
 
 export default {Auth, User, Parties};

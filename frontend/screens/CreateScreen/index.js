@@ -1,5 +1,5 @@
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Button, Input} from 'native-base';
 import DateTimeInput from '../../components/DateTImeInput';
 import agent from '../../agent';
@@ -9,6 +9,7 @@ const CreateScreen = () => {
   const [location, setLocation] = useState('');
   const [dateTime, setDateTime] = useState(new Date());
   const [description, setDescription] = useState('');
+  const [requests, setRequests] = useState([]);
 
   const onSubmitHandler = () => {
     const formData = {
@@ -31,8 +32,63 @@ const CreateScreen = () => {
       });
   };
 
+  const acceptRequest = (party_uuid, user_uuid) => {
+    agent.Parties.acceptRequest(party_uuid, user_uuid)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.status == 'success') {
+          setRequests(
+            requests.filter(
+              request =>
+                !(
+                  request.party_uuid == party_uuid &&
+                  request.user_uuid == user_uuid
+                ),
+            ),
+          );
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const declineRequest = (party_uuid, user_uuid) => {
+    agent.Parties.declineRequest(party_uuid, user_uuid)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.status == 'success') {
+          setRequests(
+            requests.filter(
+              request =>
+                !(
+                  request.party_uuid == party_uuid &&
+                  request.user_uuid == user_uuid
+                ),
+            ),
+          );
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    agent.Parties.requests()
+      .then(res => {
+        console.log(res.data);
+        setRequests(res.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <ScrollView style={styles.mainContainer}>
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={{paddingTop: 15, paddingHorizontal: 10}}>
       <View style={styles.formContainer}>
         <Input
           variant="outline"
@@ -116,6 +172,50 @@ const CreateScreen = () => {
           Create Party
         </Button>
       </View>
+      {requests[0] ? (
+        <>
+          <Text style={styles.header}>Request:</Text>
+          {requests.map(request => {
+            return (
+              <View style={styles.requestCard} key={requests.indexOf(request)}>
+                <Text style={styles.requestText}>
+                  {request.username}{' '}
+                  <Text style={styles.requestTextWhite}>
+                    requested to join{' '}
+                  </Text>
+                  {request.party_name}
+                </Text>
+                <View style={styles.buttonContainer}>
+                  <Button
+                    style={{...styles.requestButton, marginRight: '1%'}}
+                    backgroundColor="green.600"
+                    _text={{
+                      fontWeight: '700',
+                      fontSize: 20,
+                    }}
+                    onPress={() => {
+                      acceptRequest(request.party_uuid, request.user_uuid);
+                    }}>
+                    Accept
+                  </Button>
+                  <Button
+                    style={{...styles.requestButton, marginLeft: '1%'}}
+                    backgroundColor="red.500"
+                    _text={{
+                      fontWeight: '700',
+                      fontSize: 20,
+                    }}
+                    onPress={() => {
+                      declineRequest(request.party_uuid, request.user_uuid);
+                    }}>
+                    Decline
+                  </Button>
+                </View>
+              </View>
+            );
+          })}
+        </>
+      ) : null}
     </ScrollView>
   );
 };
@@ -123,14 +223,42 @@ const CreateScreen = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     width: '100%',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
   },
   formContainer: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  header: {
+    color: 'white',
+    fontWeight: '800',
+    fontSize: 30,
+    marginVertical: 15,
+  },
+  requestCard: {
+    borderColor: '#7209b7',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  requestText: {
+    color: '#b5179e',
+    fontWeight: '600',
+    fontSize: 21,
+  },
+  requestTextWhite: {
+    color: 'white',
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 15,
+  },
+  requestButton: {
+    width: '48%',
+    marginHorizontal: 'auto',
   },
 });
 

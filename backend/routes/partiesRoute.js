@@ -86,4 +86,64 @@ router.post(
   })
 );
 
+router.get(
+  "/requests",
+  catchAsync(async (req, res) => {
+    const requests = await db.query(
+      format(
+        "SELECT username, party_name, party_member.user_uuid, party.party_uuid FROM party JOIN party_member ON party.party_uuid=party_member.party_uuid " +
+          "JOIN user_account ON user_account.user_uuid=party_member.user_uuid WHERE party.party_uuid IN " +
+          "(SELECT DISTINCT party.party_uuid FROM party JOIN party_member ON party.party_uuid=party_member.party_uuid WHERE " +
+          "party_member.user_uuid=%L AND party_member.member_status='host') AND party_member.member_status='pending'",
+        req.user.user_uuid
+      )
+    );
+
+    res.send({
+      status: "success",
+      data: requests.rows,
+    });
+  })
+);
+
+router.put(
+  "/accept",
+  catchAsync(async (req, res) => {
+    const result = await db.query(
+      format(
+        "UPDATE party_member SET member_status='joined' WHERE party_uuid=%L AND user_uuid=%L RETURNING member_status",
+        req.body.party_uuid,
+        req.body.user_uuid
+      )
+    );
+
+    if (result.rows[0] && result.rows[0].member_status) {
+      res.send({
+        status: "success",
+      });
+    } else {
+      res.send({
+        status: "failed",
+      });
+    }
+  })
+);
+
+router.delete(
+  "/decline",
+  catchAsync(async (req, res) => {
+    const result = await db.query(
+      format(
+        "DELETE FROM party_member WHERE party_uuid=%L AND user_uuid=%L AND member_status='pending'",
+        req.body.party_uuid,
+        req.body.user_uuid
+      )
+    );
+
+    res.send({
+      status: "success",
+    });
+  })
+);
+
 module.exports = router;

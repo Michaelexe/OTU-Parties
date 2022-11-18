@@ -118,7 +118,11 @@ function App() {
             },
             headerTintColor: 'white',
           })}>
-          <Tab.Screen name="Parties" component={PartiesScreen} />
+          <Tab.Screen
+            name="Parties"
+            component={PartiesScreen}
+            options={{headerShown: false}}
+          />
           <Tab.Screen name="Join" component={JoinScreen} />
           <Tab.Screen name="Create" component={CreateScreen} />
           <Tab.Screen name="Setting" component={SettingsScreen} />

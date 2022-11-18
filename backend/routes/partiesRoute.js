@@ -146,4 +146,50 @@ router.delete(
   })
 );
 
+router.get(
+  "/:id/members",
+  catchAsync(async (req, res) => {
+    const members = await db.query(
+      format(
+        "SELECT username, member_status FROM party_member JOIN user_account ON party_member.user_uuid=user_account.user_uuid WHERE party_member.party_uuid=%L AND party_member.member_status!='pending' ORDER BY CASE member_status WHEN 'host' THEN 1 WHEN 'joined' THEN 2 END",
+        req.params.id
+      )
+    );
+
+    res.send({
+      members: members.rows,
+    });
+  })
+);
+
+router.delete(
+  "/:id/leave",
+  catchAsync(async (req, res) => {
+    await db.query(
+      format(
+        "DELETE FROM party_member WHERE party_uuid=%L AND user_uuid=%L",
+        req.params.id,
+        req.user.user_uuid
+      )
+    );
+
+    res.send({
+      status: "success",
+    });
+  })
+);
+
+router.delete(
+  "/:id/delete",
+  catchAsync(async (req, res) => {
+    await db.query(
+      format("DELETE FROM party WHERE party_uuid=%L", req.params.id)
+    );
+
+    res.send({
+      status: "success",
+    });
+  })
+);
+
 module.exports = router;

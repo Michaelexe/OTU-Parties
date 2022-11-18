@@ -39,6 +39,9 @@ const Parties = {
     instance.put('/parties/accept', {party_uuid, user_uuid}),
   declineRequest: (party_uuid, user_uuid) =>
     instance.delete('/parties/decline', {data: {party_uuid, user_uuid}}),
+  members: party_uuid => instance.get(`/parties/${party_uuid}/members`),
+  leaveParty: party_uuid => instance.delete(`/parties/${party_uuid}/leave`),
+  deleteParty: party_uuid => instance.delete(`/parties/${party_uuid}/delete`),
 };
 
 export default {Auth, User, Parties};

@@ -11,6 +11,7 @@ const SettingsScreen = () => {
       <Button
         size={'md'}
         style={styles.logout}
+        _text={{fontSize: 18, fontWeight: '700'}}
         onPress={() => {
           dispatch(logout());
         }}>

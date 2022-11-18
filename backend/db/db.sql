@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS party (
 );
 
 CREATE TABLE party_member (
-    party_uuid UUID REFERENCES party(party_uuid),
-    user_uuid UUID REFERENCES user_account(user_uuid),
+    party_uuid UUID REFERENCES party(party_uuid) ON DELETE CASCADE,
+    user_uuid UUID REFERENCES user_account(user_uuid) ON DELETE CASCADE,
     member_status member_status NOT NULL
 );

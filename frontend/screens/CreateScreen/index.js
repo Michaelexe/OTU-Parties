@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react';
 import {Button, Input} from 'native-base';
 import DateTimeInput from '../../components/DateTImeInput';
 import agent from '../../agent';
+import {useDispatch} from 'react-redux';
+import {login} from '../../reducers/users';
 
 const CreateScreen = () => {
   const [name, setName] = useState('');
@@ -10,6 +12,7 @@ const CreateScreen = () => {
   const [dateTime, setDateTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [requests, setRequests] = useState([]);
+  const dispatch = useDispatch();
 
   const onSubmitHandler = () => {
     const formData = {
@@ -25,7 +28,20 @@ const CreateScreen = () => {
 
     agent.Parties.create(formData)
       .then(res => {
-        console.log(res.data);
+        if (res.data.status == 'success') {
+          console.log(res.data);
+          setDateTime(new Date());
+          setDescription('');
+          setLocation('');
+          setName('');
+          agent.User.getInfo()
+            .then(res2 => {
+              dispatch(login(res2.data));
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
       })
       .catch(err => {
         console.log(err);

@@ -8,6 +8,7 @@ import {name as appName} from './app.json';
 import store from './store';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme} from 'native-base';
+import 'react-native-gesture-handler';
 
 const newColors = {
   main: {

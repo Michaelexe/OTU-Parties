@@ -53,7 +53,7 @@ router.post(
         user_uuid: user.rows[0].user_uuid,
       },
       process.env.JWTSECRET,
-      { expiresIn: "1m" },
+      { expiresIn: "7d" },
       (err, token) => {
         if (err) throw err;
         res.send({

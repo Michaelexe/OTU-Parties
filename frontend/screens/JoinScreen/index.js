@@ -2,9 +2,11 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import agent from '../../agent';
 import {Button} from 'native-base';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {login} from '../../reducers/users';
 
-const JoinScreen = () => {
+const JoinScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [parties, setParties] = useState([]);
   const user = useSelector(state => state.user);
 
@@ -14,6 +16,13 @@ const JoinScreen = () => {
         console.log(res.data);
         if (res.data.status === 'success') {
           setParties(parties.filter(party => party.party_uuid != party_uuid));
+          agent.User.getInfo()
+            .then(res2 => {
+              dispatch(login(res2.data));
+            })
+            .catch(err => {
+              console.log(err);
+            });
         }
       })
       .catch(err => {
@@ -32,41 +41,52 @@ const JoinScreen = () => {
   }, []);
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      {parties.map(party => {
-        const dateTime = new Date(party.date_time);
-        return (
-          <View key={party.party_uuid} style={styles.partyCard}>
-            <Text style={styles.nameText}>{party.party_name}</Text>
-            <Text style={styles.locationText}>Location: {party.location}</Text>
-            <Text style={styles.dateText}>{`On ${dateTime.toLocaleString(
-              'default',
-              {
-                month: 'short',
-              },
-            )} ${dateTime.getDate()}, ${dateTime.getFullYear()} at ${dateTime.toLocaleTimeString(
-              'en-US',
-              {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-              },
-            )}`}</Text>
-            {party.description ? (
-              <Text style={styles.descriptionText}>"{party.description}"</Text>
-            ) : null}
-            <Button
-              size="lg"
-              backgroundColor={'main.200'}
-              style={{width: '100%', marginTop: 15}}
-              onPress={() => {
-                onJoinHandler(party.party_uuid);
-              }}>
-              Request to join
-            </Button>
-          </View>
-        );
-      })}
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={{
+        paddingTop: 15,
+        paddingHorizontal: 10,
+        display: 'flex',
+        minHeight: '100%',
+      }}>
+      {parties[0] ? (
+        parties.map(party => {
+          const dateTime = new Date(party.date_time);
+          return (
+            <View key={party.party_uuid} style={styles.partyCard}>
+              <Text style={styles.nameText}>{party.party_name}</Text>
+              {party.description ? (
+                <Text style={styles.descriptionText}>
+                  "{party.description}"
+                </Text>
+              ) : null}
+              <Button
+                size="lg"
+                backgroundColor={'main.200'}
+                style={{width: '100%', marginTop: 15}}
+                onPress={() => {
+                  onJoinHandler(party.party_uuid);
+                }}>
+                Request to join
+              </Button>
+            </View>
+          );
+        })
+      ) : (
+        <View style={styles.noParties}>
+          <Text style={styles.noPartiesText}>
+            There are no parties at this time to join.
+          </Text>
+          <Button
+            style={styles.noPartiesButton}
+            _text={{fontWeight: '700', fontSize: 18}}
+            onPress={() => {
+              navigation.navigate('Create');
+            }}>
+            Click Here to Create One
+          </Button>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -74,8 +94,6 @@ const JoinScreen = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     width: '100%',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
   },
   partyCard: {
     borderColor: '#7209b7',
@@ -97,6 +115,25 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: 'white',
+  },
+  noParties: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noPartiesText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 25,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  noPartiesButton: {
+    width: '100%',
+    backgroundColor: '#7209b7',
+    marginBottom: 10,
   },
 });
 

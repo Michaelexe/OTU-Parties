@@ -143,7 +143,7 @@ const CreateScreen = () => {
               marginRight: '1%',
               justifyContent: 'flex-start',
             }}
-            textStyle={{color: '#7209b7', fontSize: 18}}
+            textStyle={{color: '#b100e8', fontSize: 18}}
             marginBottom={3}
             state={dateTime}
             setState={setDateTime}
@@ -160,7 +160,7 @@ const CreateScreen = () => {
               marginLeft: '1%',
               justifyContent: 'flex-start',
             }}
-            textStyle={{color: '#7209b7', fontSize: 18}}
+            textStyle={{color: '#b100e8', fontSize: 18}}
             marginBottom={3}
             state={dateTime}
             setState={setDateTime}

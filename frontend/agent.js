@@ -28,6 +28,7 @@ const Auth = {
 
 const User = {
   getInfo: () => instance.get('/user/info'),
+  delete: () => instance.delete('/user/delete'),
 };
 
 const Parties = {

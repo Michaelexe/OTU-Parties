@@ -112,6 +112,8 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: 'white',
+    fontSize: 16,
+    marginTop: 15,
   },
   dateText: {
     color: 'white',

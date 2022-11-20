@@ -24,49 +24,49 @@ const MainScreen = ({navigation}) => {
         <>
           {user.partiesCreated[0] ? (
             <>
-              <Text style={styles.header}>Hosted: </Text>
+              <Text style={styles.header}>Hosted</Text>
               {user.partiesCreated.map(party => {
                 const dateTime = new Date(party.date_time);
                 return (
-                  <TouchableWithoutFeedback
-                    key={party.party_uuid}
-                    onPress={() => {
-                      navigation.navigate('Party Info', {party});
-                    }}>
-                    <View style={{...styles.partyCard, borderColor: '#7209b7'}}>
-                      <Text style={{...styles.nameText, color: '#b5179e'}}>
-                        {party.party_name}
+                  <View
+                    style={{...styles.partyCard, borderColor: '#b100e8'}}
+                    key={party.party_uuid}>
+                    <Text style={{...styles.nameText, color: '#b5179e'}}>
+                      {party.party_name}
+                    </Text>
+                    <Text style={styles.locationText}>
+                      Location:{' '}
+                      <Text style={{color: '#b5179e', fontWeight: '500'}}>
+                        {party.location}
                       </Text>
-                      <Text style={styles.locationText}>
-                        Location:{' '}
-                        <Text style={{color: '#b5179e', fontWeight: '500'}}>
-                          {party.location}
-                        </Text>
+                    </Text>
+                    <Text style={styles.dateText}>
+                      On{' '}
+                      <Text style={{color: '#b5179e', fontWeight: '400'}}>
+                        {dateTime.toLocaleString('default', {
+                          month: 'short',
+                        })}{' '}
+                        {dateTime.getDate()}, {dateTime.getFullYear()}{' '}
                       </Text>
-                      <Text style={styles.dateText}>
-                        On{' '}
-                        <Text style={{color: '#b5179e', fontWeight: '400'}}>
-                          {dateTime.toLocaleString('default', {
-                            month: 'short',
-                          })}{' '}
-                          {dateTime.getDate()}, {dateTime.getFullYear()}{' '}
-                        </Text>
-                        at{' '}
-                        <Text style={{color: '#b5179e', fontWeight: '400'}}>
-                          {dateTime.toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true,
-                          })}
-                        </Text>
+                      at{' '}
+                      <Text style={{color: '#b5179e', fontWeight: '400'}}>
+                        {dateTime.toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                        })}
                       </Text>
-                      {/* {party.description ? (
-                        <Text style={styles.descriptionText}>
-                          "{party.description}"
-                        </Text>
-                      ) : null} */}
-                    </View>
-                  </TouchableWithoutFeedback>
+                    </Text>
+                    <Button
+                      size="lg"
+                      backgroundColor={'main.100'}
+                      style={{width: '100%', marginTop: 15}}
+                      onPress={() => {
+                        navigation.navigate('Party Info', {party});
+                      }}>
+                      See More
+                    </Button>
+                  </View>
                 );
               })}
             </>
@@ -75,52 +75,51 @@ const MainScreen = ({navigation}) => {
             party => party.member_status == 'joined',
           )[0] ? (
             <>
-              <Text style={styles.header}>Joined: </Text>
+              <Text style={styles.header}>Joined</Text>
               {user.partiesJoined
                 .filter(party => party.member_status == 'joined')
                 .map(party => {
                   const dateTime = new Date(party.date_time);
                   return (
-                    <TouchableWithoutFeedback
+                    <View
                       key={party.party_uuid}
-                      onPress={() => {
-                        navigation.navigate('Party Info', {party});
-                      }}>
-                      <View
-                        style={{...styles.partyCard, borderColor: '#b5179e'}}>
-                        <Text style={{...styles.nameText, color: '#f72585'}}>
-                          {party.party_name}
+                      style={{...styles.partyCard, borderColor: '#b5179e'}}>
+                      <Text style={{...styles.nameText, color: '#f72585'}}>
+                        {party.party_name}
+                      </Text>
+                      <Text style={styles.locationText}>
+                        Location:{' '}
+                        <Text style={{color: '#f72585', fontWeight: '500'}}>
+                          {party.location}
                         </Text>
-                        <Text style={styles.locationText}>
-                          Location:{' '}
-                          <Text style={{color: '#f72585', fontWeight: '500'}}>
-                            {party.location}
-                          </Text>
+                      </Text>
+                      <Text style={styles.dateText}>
+                        On{' '}
+                        <Text style={{color: '#f72585', fontWeight: '400'}}>
+                          {dateTime.toLocaleString('default', {
+                            month: 'short',
+                          })}{' '}
+                          {dateTime.getDate()}, {dateTime.getFullYear()}{' '}
                         </Text>
-                        <Text style={styles.dateText}>
-                          On{' '}
-                          <Text style={{color: '#f72585', fontWeight: '400'}}>
-                            {dateTime.toLocaleString('default', {
-                              month: 'short',
-                            })}{' '}
-                            {dateTime.getDate()}, {dateTime.getFullYear()}{' '}
-                          </Text>
-                          at{' '}
-                          <Text style={{color: '#f72585', fontWeight: '400'}}>
-                            {dateTime.toLocaleTimeString('en-US', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              hour12: true,
-                            })}
-                          </Text>
+                        at{' '}
+                        <Text style={{color: '#f72585', fontWeight: '400'}}>
+                          {dateTime.toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}
                         </Text>
-                        {/* {party.description ? (
-                          <Text style={styles.descriptionText}>
-                            "{party.description}"
-                          </Text>
-                        ) : null} */}
-                      </View>
-                    </TouchableWithoutFeedback>
+                      </Text>
+                      <Button
+                        size="lg"
+                        backgroundColor={'main.50'}
+                        style={{width: '100%', marginTop: 15}}
+                        onPress={() => {
+                          navigation.navigate('Party Info', {party});
+                        }}>
+                        See More
+                      </Button>
+                    </View>
                   );
                 })}
             </>
@@ -129,11 +128,10 @@ const MainScreen = ({navigation}) => {
             party => party.member_status == 'pending',
           )[0] ? (
             <>
-              <Text style={styles.header}>Pending: </Text>
+              <Text style={styles.header}>Pending</Text>
               {user.partiesJoined
                 .filter(party => party.member_status == 'pending')
                 .map(party => {
-                  const dateTime = new Date(party.date_time);
                   return (
                     <View
                       key={party.party_uuid}
@@ -215,9 +213,10 @@ const styles = StyleSheet.create({
   },
   header: {
     color: 'white',
-    fontWeight: '800',
+    fontWeight: '700',
     fontSize: 30,
     marginBottom: 15,
+    textAlign: 'center',
   },
   noParties: {
     marginTop: 'auto',
